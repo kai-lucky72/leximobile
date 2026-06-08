@@ -1,0 +1,12 @@
+Starting project at C:\Users\kagab\projects\exams\practical\mobile\my-app
+Using src/app as the root directory for Expo Router.
+React Compiler enabled
+Starting Metro Bundler
+
+› Opening exp://10.11.75.99:8084 on Mara_Z_d
+Waiting on http://localhost:8084
+An update for expo is available: 56.0.8 → ~56.0.9
+5 other packages may need updating. Run npx expo install --check for details.
+Logs for your project will appear below.
+λ Bundled 2177ms node_modules\expo\node_modules\@expo\cli\node_modules\@expo\router-server\node\render.js (1614 modules)
+Web Bundled 2745ms node_modules\expo-router\entry.js (1485 modules)

@@ -1,0 +1,11 @@
+Starting project at C:\Users\kagab\projects\exams\practical\mobile\my-app
+Using src/app as the root directory for Expo Router.
+React Compiler enabled
+Starting Metro Bundler
+
+warning: Bundler cache is empty, rebuilding (this may take a minute)
+› Opening exp://192.168.8.19:8091 on Mara_Z_d
+Waiting on http://localhost:8091
+Logs for your project will appear below.
+Android Bundled 7342ms node_modules\expo-router\entry.js (1886 modules)
+ WARN  InteractionManager has been deprecated and will be removed in a future release. Please refactor long tasks into smaller ones, and  use 'requestIdleCallback' instead.

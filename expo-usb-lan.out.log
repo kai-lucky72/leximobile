@@ -1,0 +1,11 @@
+Starting project at C:\Users\kagab\projects\exams\practical\mobile\my-app
+Using src/app as the root directory for Expo Router.
+React Compiler enabled
+Starting Metro Bundler
+
+warning: Bundler cache is empty, rebuilding (this may take a minute)
+Waiting on http://localhost:8090
+Logs for your project will appear below.
+λ Bundled 92017ms node_modules\expo\node_modules\@expo\cli\node_modules\@expo\router-server\node\render.js (1613 modules)
+Web Bundled 93641ms node_modules\expo-router\entry.js (1498 modules)
+Android Bundled 92713ms node_modules\expo-router\entry.js (1886 modules)
