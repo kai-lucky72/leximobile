@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LexiTheme } from '@/constants/lexi-theme';
 
 type SearchBarProps = {
+  compact?: boolean;
   error?: string;
   onChangeText: (value: string) => void;
   onSubmit: () => void;
@@ -12,17 +13,29 @@ type SearchBarProps = {
   value: string;
 };
 
+// Keep the search a single English word: drop anything after the first whitespace,
+// then allow only letters, hyphen, apostrophe.
+function sanitizeSearchInput(value: string) {
+  return value.replace(/\s+/g, '').replace(/[^A-Za-z\-']/g, '');
+}
+
 export function SearchBar({
+  compact,
   error,
   onChangeText,
   onSubmit,
-  placeholder = 'Search for a word...',
+  placeholder = 'Search',
   submitting,
   value,
 }: SearchBarProps) {
   return (
     <View style={styles.wrapper}>
-      <View style={[styles.searchContainer, !!error && styles.searchContainerError]}>
+      <View
+        style={[
+          styles.searchContainer,
+          compact && styles.searchContainerCompact,
+          !!error && styles.searchContainerError,
+        ]}>
         <MaterialCommunityIcons
           color={LexiTheme.colors.textMuted}
           name="magnify"
@@ -33,25 +46,39 @@ export function SearchBar({
           autoCapitalize="none"
           autoCorrect={false}
           editable={!submitting}
-          onChangeText={onChangeText}
+          onChangeText={(next) => onChangeText(sanitizeSearchInput(next))}
           onSubmitEditing={onSubmit}
           placeholder={placeholder}
-          placeholderTextColor="#6B7280"
+          placeholderTextColor="#9AA3B2"
           returnKeyType="search"
           style={styles.input}
           value={value}
         />
-        <Pressable
-          accessibilityRole="button"
-          disabled={submitting}
-          onPress={onSubmit}
-          style={({ pressed }) => [
-            styles.searchButton,
-            submitting && styles.searchButtonDisabled,
-            pressed && styles.searchButtonPressed,
-          ]}>
-          <Text style={styles.searchButtonText}>{submitting ? 'Loading...' : 'Search'}</Text>
-        </Pressable>
+        {compact ? (
+          <Pressable
+            accessibilityRole="button"
+            disabled={submitting}
+            onPress={onSubmit}
+            style={({ pressed }) => [styles.iconSubmit, pressed && styles.iconSubmitPressed]}>
+            <MaterialCommunityIcons
+              color={submitting ? LexiTheme.colors.textMuted : LexiTheme.colors.textPrimary}
+              name={submitting ? 'dots-horizontal' : 'arrow-right'}
+              size={18}
+            />
+          </Pressable>
+        ) : (
+          <Pressable
+            accessibilityRole="button"
+            disabled={submitting}
+            onPress={onSubmit}
+            style={({ pressed }) => [
+              styles.searchButton,
+              submitting && styles.searchButtonDisabled,
+              pressed && styles.searchButtonPressed,
+            ]}>
+            <Text style={styles.searchButtonText}>{submitting ? 'Loading...' : 'Search'}</Text>
+          </Pressable>
+        )}
       </View>
 
       {error ? (
@@ -74,11 +101,27 @@ const styles = StyleSheet.create({
     backgroundColor: LexiTheme.colors.surface,
     borderColor: LexiTheme.colors.border,
     borderRadius: LexiTheme.radius.pill,
-    borderWidth: 2,
+    borderWidth: 1.5,
     flexDirection: 'row',
-    minHeight: 58,
+    minHeight: 52,
     paddingLeft: 18,
     paddingRight: 8,
+    shadowColor: '#0F172A',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+  },
+  searchContainerCompact: {
+    minHeight: 48,
+  },
+  iconSubmit: {
+    alignItems: 'center',
+    height: 36,
+    justifyContent: 'center',
+    width: 36,
+  },
+  iconSubmitPressed: {
+    opacity: 0.7,
   },
   searchContainerError: {
     borderColor: '#F2B8B5',
