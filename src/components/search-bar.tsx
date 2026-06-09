@@ -7,22 +7,29 @@ type SearchBarProps = {
   compact?: boolean;
   error?: string;
   onChangeText: (value: string) => void;
+  onInvalidInput?: (message: string) => void;
   onSubmit: () => void;
   placeholder?: string;
   submitting?: boolean;
   value: string;
 };
 
-// Keep the search a single English word: drop anything after the first whitespace,
-// then allow only letters, hyphen, apostrophe.
-function sanitizeSearchInput(value: string) {
-  return value.replace(/\s+/g, '').replace(/[^A-Za-z\-']/g, '');
+// Allow letters, spaces, hyphen, apostrophe. Digits are rejected with a user-facing message.
+// Other punctuation is silently dropped.
+function sanitizeSearchInput(value: string): { sanitized: string; rejection: string | null } {
+  let rejection: string | null = null;
+  if (/\d/.test(value)) {
+    rejection = 'Numbers are not allowed in a word.';
+  }
+  const sanitized = value.replace(/[^A-Za-z\s\-']/g, '');
+  return { sanitized, rejection };
 }
 
 export function SearchBar({
   compact,
   error,
   onChangeText,
+  onInvalidInput,
   onSubmit,
   placeholder = 'Search',
   submitting,
@@ -46,7 +53,13 @@ export function SearchBar({
           autoCapitalize="none"
           autoCorrect={false}
           editable={!submitting}
-          onChangeText={(next) => onChangeText(sanitizeSearchInput(next))}
+          onChangeText={(next) => {
+            const { sanitized, rejection } = sanitizeSearchInput(next);
+            if (rejection) {
+              onInvalidInput?.(rejection);
+            }
+            onChangeText(sanitized);
+          }}
           onSubmitEditing={onSubmit}
           placeholder={placeholder}
           placeholderTextColor="#9AA3B2"

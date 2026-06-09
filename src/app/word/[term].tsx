@@ -6,6 +6,7 @@ import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 
 import { AppShell } from '@/components/app-shell';
 import { EmptyStateCard } from '@/components/empty-state-card';
+import { FadeInView, Skeleton } from '@/components/motion';
 import { MeaningCard } from '@/components/meaning-card';
 import { LexiTheme } from '@/constants/lexi-theme';
 import { useLexi } from '@/providers/lexi-provider';
@@ -196,19 +197,19 @@ export default function WordDetailsScreen() {
 
           {[0, 1, 2].map((index) => (
             <View key={index} style={styles.skeletonCard}>
-              <View style={[styles.skeletonBar, { width: '55%', height: 18 }]} />
-              <View style={[styles.skeletonBar, { width: '92%' }]} />
-              <View style={[styles.skeletonBar, { width: '85%' }]} />
+              <Skeleton style={[styles.skeletonBar, { width: '55%', height: 18 }]} />
+              <Skeleton style={[styles.skeletonBar, { width: '92%' }]} />
+              <Skeleton style={[styles.skeletonBar, { width: '85%' }]} />
               {index === 0 ? (
                 <View style={styles.skeletonPillRow}>
-                  <View style={styles.skeletonPill} />
-                  <View style={styles.skeletonPill} />
-                  <View style={styles.skeletonPill} />
+                  <Skeleton style={styles.skeletonPill} />
+                  <Skeleton style={styles.skeletonPill} />
+                  <Skeleton style={styles.skeletonPill} />
                 </View>
               ) : index === 1 ? (
-                <View style={styles.skeletonAvatar} />
+                <Skeleton style={styles.skeletonAvatar} />
               ) : (
-                <View style={styles.skeletonButton} />
+                <Skeleton style={styles.skeletonButton} />
               )}
             </View>
           ))}
@@ -326,7 +327,7 @@ export default function WordDetailsScreen() {
           ) : null}
         </>
       ) : entry ? (
-        <>
+        <FadeInView style={styles.detailStack}>
           <View style={styles.wordHeader}>
             <Text style={styles.wordTitle}>{entry.word}</Text>
             <View style={styles.pronunciationRow}>
@@ -426,13 +427,16 @@ export default function WordDetailsScreen() {
               </Text>
             </View>
           </View>
-        </>
+        </FadeInView>
       ) : null}
     </AppShell>
   );
 }
 
 const styles = StyleSheet.create({
+  detailStack: {
+    gap: 24,
+  },
   wordHeader: {
     gap: 12,
   },

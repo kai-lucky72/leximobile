@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router, useNavigation } from 'expo-router';
 
 import { AppShell } from '@/components/app-shell';
+import { FadeInView } from '@/components/motion';
 import { LexiTheme } from '@/constants/lexi-theme';
 import { SearchBar } from '@/components/search-bar';
 import { useLexi } from '@/providers/lexi-provider';
@@ -29,7 +30,9 @@ export default function HomeScreen() {
   const hasHistory = history.length > 0;
 
   function runSearch(rawWord: string) {
-    const normalizedWord = rawWord.trim().toLowerCase();
+    // Strip whitespace anywhere in the value so "ice cream" becomes "icecream"
+    // before it ever reaches the dictionary API.
+    const normalizedWord = rawWord.replace(/\s+/g, '').toLowerCase();
     if (!normalizedWord) {
       setError({
         kind: 'validation',
@@ -56,9 +59,13 @@ export default function HomeScreen() {
       error={error?.message}
       onChangeText={(value) => {
         setQuery(value);
-        if (error) {
+        // Clear any previous error once the user is typing a clean value.
+        if (error && error.kind === 'validation' && !/\d/.test(value)) {
           setError(null);
         }
+      }}
+      onInvalidInput={(message) => {
+        setError({ kind: 'validation', message });
       }}
       onSubmit={() => runSearch(query)}
       placeholder={hasHistory ? 'Search for a word...' : 'Search'}
@@ -96,7 +103,7 @@ export default function HomeScreen() {
       }
       title="LexiTech">
       {hasHistory ? (
-        <>
+        <FadeInView style={styles.screenStack}>
           <View style={styles.heroSection}>
             <Text style={styles.heroTitle}>Master Your Language</Text>
             <Text style={styles.heroSubtitle}>
@@ -146,9 +153,9 @@ export default function HomeScreen() {
             </Text>
             <Text style={styles.quoteAuthor}>- Ludwig Wittgenstein</Text>
           </View>
-        </>
+        </FadeInView>
       ) : (
-        <>
+        <FadeInView style={styles.screenStack}>
           <View style={styles.bookIconWrap}>
             <MaterialCommunityIcons
               color={LexiTheme.colors.mintText}
@@ -185,13 +192,16 @@ export default function HomeScreen() {
               </View>
             ))}
           </View>
-        </>
+        </FadeInView>
       )}
     </AppShell>
   );
 }
 
 const styles = StyleSheet.create({
+  screenStack: {
+    gap: 24,
+  },
   heroSection: {
     gap: 14,
   },
