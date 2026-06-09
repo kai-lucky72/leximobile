@@ -5,6 +5,9 @@ The app is a single React Native client with no custom backend. State is local; 
 ## Layered view
 
 ```mermaid
+---
+id: e92cb68e-fc74-451a-b23f-344c22f64ba8
+---
 flowchart TB
     subgraph Device["📱 Mobile Device (React Native + Expo)"]
         direction TB
@@ -39,7 +42,7 @@ flowchart TB
         Store <--> AsyncS
     end
 
-    API -- "HTTPS GET" --> Ext[(api.dictionaryapi.dev<br/>/api/v2/entries/en/{word})]
+    API -- "HTTPS GET" --> Ext[("api.dictionaryapi.dev<br/>/api/v2/entries/en/{word}")]
 
     classDef ext fill:#fde68a,stroke:#b45309,color:#000
     class Ext ext

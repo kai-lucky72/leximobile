@@ -14,6 +14,9 @@ Each user-facing interaction is shown as a sequence diagram. Actors:
 ## 3.1 Successful word search
 
 ```mermaid
+---
+id: a2b22c39-d97d-4142-bca6-71ba84d1a148
+---
 sequenceDiagram
     actor User
     participant Home
